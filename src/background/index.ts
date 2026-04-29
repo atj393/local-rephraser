@@ -11,8 +11,10 @@ import { openOrFocusAiTab } from '@/shared/tabs';
 // back to URL matching, which is still correct behaviour.
 const lastAiTabRef: { value?: number } = {};
 
-chrome.runtime.onInstalled.addListener(() => {
-  // No setup needed — settings have safe defaults loaded lazily on first read.
+chrome.runtime.onInstalled.addListener((details) => {
+  if (details.reason === 'install') {
+    void chrome.runtime.openOptionsPage();
+  }
 });
 
 // Open the options page when the user clicks the extension action icon.

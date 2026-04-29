@@ -15,6 +15,11 @@ const PAGE_STYLES = `
 [data-personal-rewriter-ui] *,[data-personal-rewriter-ui] *::before,[data-personal-rewriter-ui] *::after{box-sizing:border-box;margin:0;padding:0}
 [data-personal-rewriter-ui]{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;font-size:13px;line-height:1.5;color:#0F172A;-webkit-font-smoothing:antialiased}
 
+/* ── Logo ────────────────────────────────── */
+[data-personal-rewriter-ui] .pr-toolbar-logo{
+  width:18px;height:18px;border-radius:4px;object-fit:contain;
+  flex-shrink:0;margin-left:4px;margin-right:2px;opacity:.85}
+
 /* ── Toolbar ──────────────────────────────── */
 [data-personal-rewriter-ui] .pr-toolbar{
   position:fixed;pointer-events:auto;display:inline-flex;align-items:center;gap:2px;
@@ -108,6 +113,17 @@ const PAGE_STYLES = `
   [data-personal-rewriter-ui] .pr-status--success{color:#34D399}
 }
 `;
+
+// ---------------------------------------------------------------------------
+// Extension icon URL (resolved once at module init, empty string in tests)
+// ---------------------------------------------------------------------------
+const ICON_URL: string = (() => {
+  try {
+    return chrome.runtime.getURL('src/assets/icons/icon32.png');
+  } catch {
+    return '';
+  }
+})();
 
 // ---------------------------------------------------------------------------
 // Positioning helpers
@@ -405,7 +421,10 @@ function FloatingUiComponent({ mountEl }: FloatingUiProps): JSX.Element | null {
                 'error',
               );
             } else {
-              setStatusMsg('Could not reach AI chat tab.', 'error');
+              setStatusMsg(
+                'Could not reach AI tab — close it, reopen it fresh, then retry.',
+                'error',
+              );
             }
           }
           break;
@@ -503,6 +522,14 @@ function FloatingUiComponent({ mountEl }: FloatingUiProps): JSX.Element | null {
         role="toolbar"
         aria-label="Rewrite text"
       >
+        {ICON_URL && (
+          <img
+            src={ICON_URL}
+            alt=""
+            aria-hidden="true"
+            className="pr-toolbar-logo"
+          />
+        )}
         {modes.map((m) => (
           <button
             key={m}

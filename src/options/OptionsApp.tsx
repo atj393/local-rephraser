@@ -86,15 +86,65 @@ export function OptionsApp(): JSX.Element {
 
   const disabledSitesText = draft.disabledSites.join('\n');
 
+  const needsSetup = loaded && !draft.aiChatUrl.trim();
+
   return (
     <main className="pr-options">
       <header className="pr-options__header">
-        <h1>Personal Rewriter</h1>
+        <div className="pr-options__title-row">
+          <img
+            src={chrome.runtime.getURL('src/assets/icons/icon48.png')}
+            alt="Personal Rewriter"
+            width={36}
+            height={36}
+            style={{ borderRadius: 8 }}
+          />
+          <h1>Personal Rewriter</h1>
+        </div>
         <p className="pr-muted">
-          Personalize how your selected text is rewritten. Settings are stored in
-          chrome.storage.sync. Nothing is sent to any server.
+          Personalize how your selected text is rewritten. Settings are stored locally.
+          Nothing is sent to any server.
         </p>
       </header>
+
+      {needsSetup && (
+        <section className="pr-card pr-welcome">
+          <h2>👋 Welcome — one quick setup step</h2>
+          <p className="pr-muted">
+            Personal Rewriter works by sending your text to an AI chat tab you already have open.
+            You just need to tell it which tab to use.
+          </p>
+          <ol className="pr-steps">
+            <li>
+              <strong>Open your AI chat and start a conversation</strong>
+              <span>
+                Go to <a href="https://chatgpt.com" target="_blank" rel="noreferrer">chatgpt.com</a> (or
+                Claude, Gemini, etc.) and send any message — even just "Hi". A conversation URL will be created.
+              </span>
+            </li>
+            <li>
+              <strong>Copy the URL from the browser bar</strong>
+              <span>
+                It will look something like <code>chatgpt.com/c/abc-123</code>.
+                Copy the full URL including <code>https://</code>.
+              </span>
+            </li>
+            <li>
+              <strong>Paste it into the "AI chat URL" field below and click Save</strong>
+              <span>
+                That's all the setup needed. The extension will reuse that conversation tab every time.
+              </span>
+            </li>
+            <li>
+              <strong>Select text on any page and start rewriting</strong>
+              <span>
+                Highlight something you typed, then pick <strong>Quick</strong>, <strong>Normal</strong>,
+                or <strong>Formal</strong>. The AI rewrites it and the result appears right in the popup — one click to apply.
+              </span>
+            </li>
+          </ol>
+        </section>
+      )}
 
       <section className="pr-card">
         <h2>AI chat</h2>

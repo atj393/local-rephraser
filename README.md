@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="src/assets/image.png" alt="Personal Rewriter" width="96" />
+
 # Personal Rewriter
 
 **A Chrome extension that rephrases your text using any AI chat — no API key, no automation, fully manual.**

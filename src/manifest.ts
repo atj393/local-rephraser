@@ -15,8 +15,20 @@ export default defineManifest({
   version: pkg.version,
   description:
     'Rephrase selected text in editable fields via a manual AI-chat workflow. No APIs, no scraping, no automation.',
+  icons: {
+    '16': 'src/assets/icons/icon16.png',
+    '32': 'src/assets/icons/icon32.png',
+    '48': 'src/assets/icons/icon48.png',
+    '128': 'src/assets/icons/icon128.png',
+  },
   action: {
     default_title: 'Personal Rewriter — open settings',
+    default_icon: {
+      '16': 'src/assets/icons/icon16.png',
+      '32': 'src/assets/icons/icon32.png',
+      '48': 'src/assets/icons/icon48.png',
+      '128': 'src/assets/icons/icon128.png',
+    },
   },
   options_ui: {
     page: 'src/options/index.html',
@@ -41,7 +53,13 @@ export default defineManifest({
   ],
   web_accessible_resources: [
     {
-      resources: ['src/options/index.html'],
+      resources: [
+        'src/options/index.html',
+        'src/assets/icons/icon16.png',
+        'src/assets/icons/icon32.png',
+        'src/assets/icons/icon48.png',
+        'src/assets/icons/icon128.png',
+      ],
       matches: ['<all_urls>'],
     },
   ],

@@ -13,154 +13,99 @@ import { replaceEditableContent } from './replace';
 // ---------------------------------------------------------------------------
 const PAGE_STYLES = `
 [data-personal-rewriter-ui] *,[data-personal-rewriter-ui] *::before,[data-personal-rewriter-ui] *::after{box-sizing:border-box;margin:0;padding:0}
-[data-personal-rewriter-ui]{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:13px;line-height:1.4;color:#111827}
+[data-personal-rewriter-ui]{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;font-size:13px;line-height:1.5;color:#0F172A;-webkit-font-smoothing:antialiased}
 
+/* ── Toolbar ──────────────────────────────── */
 [data-personal-rewriter-ui] .pr-toolbar{
-  position:fixed;pointer-events:auto;
-  display:inline-flex;align-items:center;gap:2px;
-  background:#fff;border:1px solid #e4e7ec;border-radius:8px;
-  padding:3px;
-  box-shadow:0 4px 14px rgba(0,0,0,.18),0 0 0 1px rgba(0,0,0,.04);
-  user-select:none}
+  position:fixed;pointer-events:auto;display:inline-flex;align-items:center;gap:2px;
+  padding:4px;background:#fff;border:1px solid rgba(0,0,0,.09);border-radius:12px;
+  box-shadow:0 8px 28px rgba(0,0,0,.13),0 2px 8px rgba(0,0,0,.07),0 0 0 .5px rgba(0,0,0,.04);
+  user-select:none;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
 [data-personal-rewriter-ui] .pr-tool-btn{
-  background:transparent;color:#111827;border:none;border-radius:5px;
-  padding:5px 10px;font:500 12px/1.4 inherit;cursor:pointer;
-  white-space:nowrap;font-family:inherit;transition:background .1s,color .1s}
-[data-personal-rewriter-ui] .pr-tool-btn:hover{background:#eff6ff;color:#1d4ed8}
-[data-personal-rewriter-ui] .pr-tool-btn:focus-visible{outline:2px solid #93c5fd;outline-offset:1px}
-[data-personal-rewriter-ui] .pr-tool-divider{
-  width:1px;height:18px;background:#e4e7ec;margin:0 2px;flex:0 0 auto}
-[data-personal-rewriter-ui] .pr-tool-settings{
-  padding:5px 7px;color:#6b7280;font-size:13px;line-height:1}
+  display:inline-flex;align-items:center;gap:5px;
+  padding:6px 11px;background:transparent;color:#334155;border:none;border-radius:8px;
+  font:500 12px/1 inherit;font-family:inherit;cursor:pointer;white-space:nowrap;
+  transition:background .15s,color .15s}
+[data-personal-rewriter-ui] .pr-tool-btn svg{flex-shrink:0;opacity:.7;transition:opacity .15s}
+[data-personal-rewriter-ui] .pr-tool-btn:hover{background:#6366F1;color:#fff}
+[data-personal-rewriter-ui] .pr-tool-btn:hover svg{opacity:1}
+[data-personal-rewriter-ui] .pr-tool-btn:focus-visible{outline:2px solid #6366F1;outline-offset:1px}
+[data-personal-rewriter-ui] .pr-tool-divider{width:1px;height:18px;background:rgba(0,0,0,.08);margin:0 2px;flex-shrink:0}
+[data-personal-rewriter-ui] .pr-tool-settings{padding:6px 8px;color:#94A3B8}
+[data-personal-rewriter-ui] .pr-tool-settings:hover{background:#F1F5F9;color:#6366F1}
 
+/* ── Panel ────────────────────────────────── */
 [data-personal-rewriter-ui] .pr-panel{
-  position:fixed;pointer-events:auto;
-  background:#fff;border:1px solid #e4e7ec;border-radius:12px;
-  width:292px;box-shadow:0 8px 30px rgba(0,0,0,.15);
-  overflow:hidden;color:#111827}
+  position:fixed;pointer-events:auto;width:300px;overflow:hidden;color:#0F172A;
+  background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:16px;
+  box-shadow:0 20px 60px rgba(0,0,0,.14),0 8px 20px rgba(0,0,0,.08),0 0 0 .5px rgba(0,0,0,.04)}
 
-[data-personal-rewriter-ui] .pr-panel-header{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:11px 14px 9px;border-bottom:1px solid #f3f4f6}
-[data-personal-rewriter-ui] .pr-panel-title{font-weight:600;font-size:13px}
-[data-personal-rewriter-ui] .pr-close{
-  background:none;border:none;cursor:pointer;color:#6b7280;
-  font-size:18px;line-height:1;padding:1px 5px;border-radius:4px;
-  pointer-events:auto;display:flex;align-items:center;font-family:inherit}
-[data-personal-rewriter-ui] .pr-close:hover{background:#f3f4f6;color:#111827}
-[data-personal-rewriter-ui] .pr-close:focus-visible{outline:2px solid #93c5fd;outline-offset:2px}
-
-[data-personal-rewriter-ui] .pr-mode-tabs{
-  display:flex;gap:4px;padding:9px 14px 7px}
-[data-personal-rewriter-ui] .pr-mode-tab{
-  flex:1;background:#f9fafb;border:1px solid #e4e7ec;border-radius:6px;
-  padding:5px 2px;font:500 12px/1.3 inherit;cursor:pointer;color:#374151;
-  text-align:center;transition:background .1s,border-color .1s}
-[data-personal-rewriter-ui] .pr-mode-tab:hover{background:#f3f4f6}
-[data-personal-rewriter-ui] .pr-mode-tab.pr-active{background:#eff6ff;border-color:#2563eb;color:#1d4ed8}
-[data-personal-rewriter-ui] .pr-mode-tab:focus-visible{outline:2px solid #93c5fd;outline-offset:2px}
-
-[data-personal-rewriter-ui] .pr-actions{
-  display:flex;flex-direction:column;gap:5px;padding:2px 14px 8px}
-[data-personal-rewriter-ui] .pr-action{
-  display:flex;align-items:center;gap:7px;
-  background:#f9fafb;border:1px solid #e4e7ec;border-radius:7px;
-  padding:8px 11px;font:500 12px/1.4 inherit;cursor:pointer;
-  color:#111827;text-align:left;width:100%;transition:background .1s}
-[data-personal-rewriter-ui] .pr-action:hover{background:#f3f4f6}
-[data-personal-rewriter-ui] .pr-action:focus-visible{outline:2px solid #93c5fd;outline-offset:2px}
-[data-personal-rewriter-ui] .pr-action--copy{background:#eff6ff;border-color:#bfdbfe;color:#1d4ed8}
-[data-personal-rewriter-ui] .pr-action--copy:hover{background:#dbeafe}
-[data-personal-rewriter-ui] .pr-action--apply{background:#f0fdf4;border-color:#bbf7d0;color:#15803d}
-[data-personal-rewriter-ui] .pr-action--apply:hover{background:#dcfce7}
-[data-personal-rewriter-ui] .pr-divider{height:1px;background:#f3f4f6;margin:2px 0}
-
+/* ── Spinner / loading ────────────────────── */
 [data-personal-rewriter-ui] .pr-loading{
-  display:flex;flex-direction:column;align-items:center;
-  padding:18px 14px 14px;gap:10px}
-[data-personal-rewriter-ui] .pr-loading p{font-size:12px;color:#374151;margin:0}
+  display:flex;flex-direction:column;align-items:center;gap:10px;padding:28px 20px 22px}
 [data-personal-rewriter-ui] .pr-spinner{
-  width:28px;height:28px;border:3px solid #e4e7ec;border-top-color:#2563eb;
-  border-radius:50%;animation:pr-spin .7s linear infinite}
+  width:32px;height:32px;border:2.5px solid #E2E8F0;border-top-color:#6366F1;
+  border-radius:50%;animation:pr-spin .75s linear infinite}
 @keyframes pr-spin{to{transform:rotate(360deg)}}
-
-[data-personal-rewriter-ui] .pr-result-text{
-  background:#f9fafb;border:1px solid #e4e7ec;border-radius:6px;
-  padding:8px 10px;font-size:12px;line-height:1.55;color:#111827;
-  max-height:160px;overflow-y:auto;white-space:pre-wrap;word-break:break-word;
-  scrollbar-width:thin}
-
-[data-personal-rewriter-ui] .pr-confirm{
-  padding:8px 14px 4px;display:flex;flex-direction:column;gap:7px}
-[data-personal-rewriter-ui] .pr-confirm p{font-size:12px;color:#374151;line-height:1.45}
-[data-personal-rewriter-ui] .pr-confirm-actions{display:flex;gap:6px}
-[data-personal-rewriter-ui] .pr-confirm-yes{
-  flex:1;background:#fef2f2;border:1px solid #fca5a5;color:#dc2626;
-  border-radius:6px;padding:6px 8px;font:500 12px/1.4 inherit;cursor:pointer}
-[data-personal-rewriter-ui] .pr-confirm-yes:hover{background:#fee2e2}
-[data-personal-rewriter-ui] .pr-confirm-no{
-  flex:1;background:#f9fafb;border:1px solid #e4e7ec;color:#374151;
-  border-radius:6px;padding:6px 8px;font:500 12px/1.4 inherit;cursor:pointer}
-[data-personal-rewriter-ui] .pr-confirm-no:hover{background:#f3f4f6}
-
-[data-personal-rewriter-ui] .pr-status{
-  padding:4px 14px 8px;font-size:11px;color:#374151;min-height:22px}
-[data-personal-rewriter-ui] .pr-status--error{color:#dc2626}
-[data-personal-rewriter-ui] .pr-status--success{color:#16a34a}
-
-[data-personal-rewriter-ui] .pr-footer{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:4px 14px 11px;gap:6px}
+[data-personal-rewriter-ui] .pr-loading-label{font-size:13px;font-weight:600;color:#0F172A;text-align:center}
+[data-personal-rewriter-ui] .pr-loading-sub{font-size:11px;color:#94A3B8;text-align:center;margin-top:-4px}
 [data-personal-rewriter-ui] .pr-cancel{
-  background:none;border:1px solid #e4e7ec;border-radius:6px;
-  padding:5px 10px;font:500 12px/1.4 inherit;cursor:pointer;color:#374151}
-[data-personal-rewriter-ui] .pr-cancel:hover{background:#f9fafb}
-[data-personal-rewriter-ui] .pr-cancel:focus-visible{outline:2px solid #93c5fd;outline-offset:2px}
-[data-personal-rewriter-ui] .pr-settings{
-  background:none;border:none;padding:5px 6px;font:12px/1 inherit;
-  cursor:pointer;color:#6b7280;border-radius:6px;
-  display:flex;align-items:center;gap:4px}
-[data-personal-rewriter-ui] .pr-settings:hover{background:#f3f4f6;color:#374151}
-[data-personal-rewriter-ui] .pr-settings:focus-visible{outline:2px solid #93c5fd;outline-offset:2px}
+  margin-top:2px;background:transparent;border:none;color:#94A3B8;
+  font:500 11px/1 inherit;font-family:inherit;cursor:pointer;
+  padding:4px 10px;border-radius:6px;transition:color .12s,background .12s}
+[data-personal-rewriter-ui] .pr-cancel:hover{color:#EF4444;background:#FEF2F2}
 
+/* ── Result confirm ───────────────────────── */
+[data-personal-rewriter-ui] .pr-confirm{display:flex;flex-direction:column;gap:10px;padding:16px}
+[data-personal-rewriter-ui] .pr-result-label{
+  font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#94A3B8}
+[data-personal-rewriter-ui] .pr-result-text{
+  background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;
+  padding:10px 12px;font-size:13px;line-height:1.6;color:#0F172A;
+  max-height:150px;overflow-y:auto;white-space:pre-wrap;word-break:break-word;scrollbar-width:thin}
+[data-personal-rewriter-ui] .pr-confirm-actions{display:flex;gap:8px}
+[data-personal-rewriter-ui] .pr-confirm-yes{
+  flex:1;display:inline-flex;align-items:center;justify-content:center;gap:5px;
+  background:#6366F1;color:#fff;border:none;border-radius:8px;
+  padding:8px 12px;font:600 12px/1.4 inherit;font-family:inherit;cursor:pointer;
+  transition:background .15s}
+[data-personal-rewriter-ui] .pr-confirm-yes:hover{background:#4F46E5}
+[data-personal-rewriter-ui] .pr-confirm-yes:focus-visible{outline:2px solid #6366F1;outline-offset:2px}
+[data-personal-rewriter-ui] .pr-confirm-no{
+  flex:1;display:inline-flex;align-items:center;justify-content:center;gap:5px;
+  background:#F1F5F9;color:#475569;border:none;border-radius:8px;
+  padding:8px 12px;font:500 12px/1.4 inherit;font-family:inherit;cursor:pointer;
+  transition:background .15s}
+[data-personal-rewriter-ui] .pr-confirm-no:hover{background:#E2E8F0}
+[data-personal-rewriter-ui] .pr-confirm-no:focus-visible{outline:2px solid #6366F1;outline-offset:2px}
+[data-personal-rewriter-ui] .pr-status{font-size:11px;color:#64748B;text-align:center}
+[data-personal-rewriter-ui] .pr-status--error{color:#EF4444}
+[data-personal-rewriter-ui] .pr-status--success{color:#10B981}
+
+/* ── Dark mode ────────────────────────────── */
 @media(prefers-color-scheme:dark){
-  [data-personal-rewriter-ui]{color:#f9fafb}
+  [data-personal-rewriter-ui]{color:#E2E8F0}
   [data-personal-rewriter-ui] .pr-toolbar{
-    background:#1f2937;border-color:#374151;
-    box-shadow:0 4px 14px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.04)}
-  [data-personal-rewriter-ui] .pr-tool-btn{color:#f9fafb}
-  [data-personal-rewriter-ui] .pr-tool-btn:hover{background:#1e3a5f;color:#93c5fd}
-  [data-personal-rewriter-ui] .pr-tool-divider{background:#374151}
-  [data-personal-rewriter-ui] .pr-tool-settings{color:#9ca3af}
-  [data-personal-rewriter-ui] .pr-panel{background:#1f2937;border-color:#374151;color:#f9fafb}
-  [data-personal-rewriter-ui] .pr-panel-header{border-color:#374151}
-  [data-personal-rewriter-ui] .pr-close{color:#9ca3af}
-  [data-personal-rewriter-ui] .pr-close:hover{background:#374151;color:#f9fafb}
-  [data-personal-rewriter-ui] .pr-mode-tab{background:#374151;border-color:#4b5563;color:#d1d5db}
-  [data-personal-rewriter-ui] .pr-mode-tab:hover{background:#4b5563}
-  [data-personal-rewriter-ui] .pr-mode-tab.pr-active{background:#1e3a5f;border-color:#3b82f6;color:#93c5fd}
-  [data-personal-rewriter-ui] .pr-action{background:#374151;border-color:#4b5563;color:#f9fafb}
-  [data-personal-rewriter-ui] .pr-action:hover{background:#4b5563}
-  [data-personal-rewriter-ui] .pr-action--copy{background:#1e3a5f;border-color:#3b82f6;color:#93c5fd}
-  [data-personal-rewriter-ui] .pr-action--copy:hover{background:#1e40af}
-  [data-personal-rewriter-ui] .pr-action--apply{background:#14532d;border-color:#16a34a;color:#86efac}
-  [data-personal-rewriter-ui] .pr-action--apply:hover{background:#166534}
-  [data-personal-rewriter-ui] .pr-divider{background:#374151}
-  [data-personal-rewriter-ui] .pr-loading p{color:#d1d5db}
-  [data-personal-rewriter-ui] .pr-spinner{border-color:#374151;border-top-color:#3b82f6}
-  [data-personal-rewriter-ui] .pr-result-text{background:#374151;border-color:#4b5563;color:#f9fafb}
-  [data-personal-rewriter-ui] .pr-confirm p{color:#d1d5db}
-  [data-personal-rewriter-ui] .pr-confirm-yes{background:#450a0a;border-color:#f87171;color:#f87171}
-  [data-personal-rewriter-ui] .pr-confirm-yes:hover{background:#7f1d1d}
-  [data-personal-rewriter-ui] .pr-confirm-no{background:#374151;border-color:#4b5563;color:#d1d5db}
-  [data-personal-rewriter-ui] .pr-confirm-no:hover{background:#4b5563}
-  [data-personal-rewriter-ui] .pr-status{color:#d1d5db}
-  [data-personal-rewriter-ui] .pr-status--error{color:#f87171}
-  [data-personal-rewriter-ui] .pr-status--success{color:#4ade80}
-  [data-personal-rewriter-ui] .pr-cancel{border-color:#4b5563;color:#d1d5db}
-  [data-personal-rewriter-ui] .pr-cancel:hover{background:#374151}
-  [data-personal-rewriter-ui] .pr-settings{color:#9ca3af}
-  [data-personal-rewriter-ui] .pr-settings:hover{background:#374151;color:#d1d5db}
+    background:rgba(15,15,25,.96);border-color:rgba(255,255,255,.08);
+    box-shadow:0 8px 28px rgba(0,0,0,.5),0 2px 8px rgba(0,0,0,.3),0 0 0 .5px rgba(255,255,255,.04)}
+  [data-personal-rewriter-ui] .pr-tool-btn{color:#CBD5E1}
+  [data-personal-rewriter-ui] .pr-tool-btn:hover{background:#6366F1;color:#fff}
+  [data-personal-rewriter-ui] .pr-tool-divider{background:rgba(255,255,255,.1)}
+  [data-personal-rewriter-ui] .pr-tool-settings{color:#475569}
+  [data-personal-rewriter-ui] .pr-tool-settings:hover{background:rgba(99,102,241,.15);color:#818CF8}
+  [data-personal-rewriter-ui] .pr-panel{
+    background:#0F0F1A;border-color:rgba(255,255,255,.08);color:#E2E8F0;
+    box-shadow:0 20px 60px rgba(0,0,0,.6),0 8px 20px rgba(0,0,0,.4),0 0 0 .5px rgba(255,255,255,.04)}
+  [data-personal-rewriter-ui] .pr-spinner{border-color:rgba(255,255,255,.1);border-top-color:#818CF8}
+  [data-personal-rewriter-ui] .pr-loading-label{color:#E2E8F0}
+  [data-personal-rewriter-ui] .pr-loading-sub{color:#334155}
+  [data-personal-rewriter-ui] .pr-cancel:hover{color:#F87171;background:rgba(239,68,68,.1)}
+  [data-personal-rewriter-ui] .pr-result-text{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.08);color:#E2E8F0}
+  [data-personal-rewriter-ui] .pr-confirm-no{background:rgba(255,255,255,.06);color:#94A3B8}
+  [data-personal-rewriter-ui] .pr-confirm-no:hover{background:rgba(255,255,255,.1)}
+  [data-personal-rewriter-ui] .pr-status{color:#475569}
+  [data-personal-rewriter-ui] .pr-status--error{color:#F87171}
+  [data-personal-rewriter-ui] .pr-status--success{color:#34D399}
 }
 `;
 
@@ -168,7 +113,7 @@ const PAGE_STYLES = `
 // Positioning helpers
 // ---------------------------------------------------------------------------
 
-const BUTTON_W = 232;
+const BUTTON_W = 270;
 const BUTTON_H = 32;
 const PANEL_W = 292;
 const PANEL_H = 280;
@@ -239,6 +184,68 @@ function externalSet(updater: (prev: FloatingState) => FloatingState): void {
 interface FloatingUiProps {
   mountEl: HTMLElement;
 }
+
+// ---------------------------------------------------------------------------
+// SVG icon components
+// ---------------------------------------------------------------------------
+
+function IconBolt() {
+  return (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z" />
+    </svg>
+  );
+}
+
+function IconPen() {
+  return (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M12 20h9" />
+      <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
+    </svg>
+  );
+}
+
+function IconBriefcase() {
+  return (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <rect x="2" y="7" width="20" height="14" rx="2" />
+      <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
+    </svg>
+  );
+}
+
+function IconGear() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="3" />
+      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+    </svg>
+  );
+}
+
+function IconCheck() {
+  return (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <polyline points="20 6 9 17 4 12" />
+    </svg>
+  );
+}
+
+function IconX() {
+  return (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <line x1="18" y1="6" x2="6" y2="18" />
+      <line x1="6" y1="6" x2="18" y2="18" />
+    </svg>
+  );
+}
+
+const MODE_ICONS: Record<RewriteMode, JSX.Element> = {
+  quick: <IconBolt />,
+  normal: <IconPen />,
+  formal: <IconBriefcase />,
+};
 
 function FloatingUiComponent({ mountEl }: FloatingUiProps): JSX.Element | null {
   const [state, setState] = useState<FloatingState>({
@@ -504,6 +511,7 @@ function FloatingUiComponent({ mountEl }: FloatingUiProps): JSX.Element | null {
             data-mode={m}
             title={`Rewrite — ${MODE_LABELS[m]}`}
           >
+            {MODE_ICONS[m]}
             {MODE_LABELS[m]}
           </button>
         ))}
@@ -514,7 +522,7 @@ function FloatingUiComponent({ mountEl }: FloatingUiProps): JSX.Element | null {
           aria-label="Settings"
           title="Settings"
         >
-          ⚙
+          <IconGear />
         </button>
       </div>
     );
@@ -535,28 +543,34 @@ function FloatingUiComponent({ mountEl }: FloatingUiProps): JSX.Element | null {
     >
       {state.awaitingResponse ? (
         <div className="pr-loading">
-          <div className="pr-spinner" aria-label="Loading" role="status" />
-          <p>Rewriting in {MODE_LABELS[state.mode]} mode…</p>
+          <div className="pr-spinner" role="status" aria-label="Loading" />
+          <div>
+            <p className="pr-loading-label">
+              Rewriting in {MODE_LABELS[state.mode]} mode
+            </p>
+            <p className="pr-loading-sub">Waiting for AI response…</p>
+          </div>
           <button className="pr-cancel" data-action="close">
             Cancel
           </button>
         </div>
       ) : state.pendingResult !== null ? (
         <div className="pr-confirm">
+          <p className="pr-result-label">AI Suggestion</p>
           <div className="pr-result-text">{state.pendingResult}</div>
           <div className="pr-confirm-actions">
             <button className="pr-confirm-yes" data-action="confirm-apply">
-              ✓ Apply
+              <IconCheck /> Apply
             </button>
             <button className="pr-confirm-no" data-action="confirm-cancel">
-              Cancel
+              <IconX /> Cancel
             </button>
           </div>
           {statusEl}
         </div>
       ) : (
         <div className="pr-confirm">
-          {statusEl ?? <p>No result.</p>}
+          {statusEl ?? <p className="pr-result-label">No result.</p>}
           <div className="pr-confirm-actions">
             <button className="pr-confirm-no" data-action="close">
               Close

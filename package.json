@@ -3,7 +3,18 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "Personal Chrome MV3 extension that rephrases selected text in editable fields via a manual AI-chat workflow. No APIs, no scraping, no automation.",
+  "description": "Chrome MV3 extension that rephrases selected text in editable fields via a manual AI-chat workflow. No API, no automation, no telemetry.",
+  "keywords": [
+    "chrome-extension",
+    "browser-extension",
+    "manifest-v3",
+    "text-rewriter",
+    "ai",
+    "productivity",
+    "typescript",
+    "react",
+    "vite"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "tsc -p tsconfig.json --noEmit && vite build",

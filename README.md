@@ -1,115 +1,136 @@
-# Personal Rewriter — Chrome Extension
+<div align="center">
 
-> **Personal hobby project.** Not affiliated with, endorsed by, or related to any company or organization. Built for personal use and shared as-is. See [LICENSE](LICENSE).
+# Personal Rewriter
 
-A personal Chrome (Manifest V3) extension that helps you rephrase selected text inside editable fields using a **fully manual** AI-chat workflow.
+**A Chrome extension that rephrases your text using any AI chat — no API key, no automation, fully manual.**
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Chrome MV3](https://img.shields.io/badge/Chrome-Manifest%20V3-4285F4?logo=googlechrome&logoColor=white)](https://developer.chrome.com/docs/extensions/mv3/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)](tsconfig.json)
+[![React 18](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)](package.json)
+[![No telemetry](https://img.shields.io/badge/telemetry-none-lightgrey)](#privacy)
+
+</div>
 
 ---
 
-## What it does
+> **Personal hobby project.** Not affiliated with, endorsed by, or related to any company or organization. Built for personal use and shared as-is.
 
-1. You type a rough message in any editable field (Gmail composer, LinkedIn, WhatsApp Web, a plain textarea, etc.).
-2. You select all the text inside that field.
-3. A small **Rewrite** button appears near the field.
-4. You click **Rewrite** and choose a mode: **Quick**, **Normal**, or **Formal**.
-5. The extension builds a personalised prompt using your saved *About Me*, *Global Prompt*, and *Avoid* rules.
-6. You click **Copy Prompt** (or **Copy & Open Chat**).
-7. The extension copies the prompt to your clipboard and optionally opens or focuses your configured AI chat tab.
-8. You **manually** paste the prompt into the AI chat, send it, and copy the AI's reply.
-9. You switch back to the original page and click **Apply Clipboard Result**.
-10. The extension reads your clipboard and replaces the field content with the rewritten text.
+Select text in any editable field. The extension builds a personalized prompt. You paste it into your AI chat, copy the reply, and apply it with one click. Nothing is automated. Nothing leaves your browser.
+
+---
+
+## Table of Contents
+
+- [How it works](#how-it-works)
+- [What it does NOT do](#what-it-does-not-do)
+- [Privacy](#privacy)
+- [Permissions](#permissions)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Modes](#modes)
+- [Step-by-step usage](#step-by-step-usage)
+- [Supported field types](#supported-field-types)
+- [Known limitations](#known-limitations)
+- [Troubleshooting](#troubleshooting)
+- [Development](#development)
+- [Stack](#stack)
+- [License](#license)
+
+---
+
+## How it works
+
+1. Select all the text in any editable field on any page.
+2. A small **✏ Rewrite** button appears — click it and choose **Quick**, **Normal**, or **Formal**.
+3. Click **Copy & Open Chat** — the prompt lands in your clipboard and your AI tab opens.
+4. Paste into the AI chat, send, copy the reply.
+5. Switch back, click **Apply Clipboard Result** — done.
 
 ---
 
 ## What it does NOT do
 
-- Does **not** call any paid or free AI API.
-- Does **not** use a local AI model or any local API endpoint.
+- Does **not** call any AI API — paid, free, or local.
 - Does **not** automate ChatGPT, Gemini, Claude, or any other AI website.
-- Does **not** paste into AI websites automatically.
 - Does **not** scrape or read AI responses from any website.
 - Does **not** send your text to any server.
-- Does **not** store analytics, telemetry, or crash reports anywhere.
+- Does **not** store analytics, telemetry, or crash reports.
 - Does **not** load any remote scripts.
 
 ---
 
-## Privacy model
+## Privacy
 
 | Data | Fate |
 |---|---|
 | Selected text | Built into a prompt string, copied to clipboard on your click. Never persisted. |
 | Rewritten text | Read from clipboard on your click. Never stored. |
-| Settings (About Me, Global Prompt, …) | Stored in `chrome.storage.sync` on your device / Google account only. |
-| Clipboard history | Never stored. The extension only reads the clipboard once, on explicit click. |
-| Network requests | None. The only outbound action is opening the URL you configured in settings. |
+| Settings | Stored in `chrome.storage.sync` — on your device / Google account only. |
+| Clipboard history | Never stored. Read once, on explicit click. |
+| Network requests | None. The only outbound action is opening the URL you configure in settings. |
 
 ---
 
-## Permissions explained
+## Permissions
 
-| Permission | Why it is needed |
+| Permission | Why |
 |---|---|
-| `storage` | Save your *About Me*, *Global Prompt*, and other settings across browser sessions. |
-| `tabs` | Find and focus your single configured AI chat tab so we never open duplicates. |
+| `storage` | Persist your settings across browser sessions. |
+| `tabs` | Find and focus your configured AI chat tab — avoids opening duplicates. |
 | `activeTab` | Operate on the current page when the floating panel is open. |
-| `clipboardWrite` | Copy the generated prompt — only after you click **Copy Prompt**. |
-| `clipboardRead` | Read the AI's reply — only after you click **Apply Clipboard Result**. |
-| `<all_urls>` (content script `matches`) | Editable fields exist on every website. The content script runs everywhere but never makes network requests — it only inspects your selection on user gesture. |
+| `clipboardWrite` | Copy the generated prompt — only on your click. |
+| `clipboardRead` | Read the AI's reply — only on your click. |
+| `<all_urls>` (content script) | Editable fields exist on every website. The script only reads your selection on user gesture and makes no network requests. |
 
 No `host_permissions` are requested. The extension never connects to any external host on its own.
 
 ---
 
-## Installation from source
+## Installation
 
 ```bash
-# 1. Clone / download this repository
-git clone <repo-url>
+git clone https://github.com/YOUR_USERNAME/personal-rewriter-extension
 cd personal-rewriter-extension
-
-# 2. Install dependencies
 npm install
-
-# 3. Build the extension
 npm run build
 ```
 
 Then in Chrome:
 
-1. Open `chrome://extensions`.
-2. Enable **Developer mode** (top-right toggle).
-3. Click **Load unpacked**.
-4. Select the `dist/` folder inside the project.
-5. The extension appears as **Personal Rewriter**.
+1. Open `chrome://extensions` and enable **Developer mode** (top-right toggle).
+2. Click **Load unpacked** and select the `dist/` folder.
+3. The extension appears as **Personal Rewriter**.
 
-To update after changing source files: run `npm run build` again, then click the reload icon on the extension card in `chrome://extensions`.
+To update after changing source files: run `npm run build` again, then click the reload icon on the extension card.
 
 ---
 
 ## Configuration
 
-Open the extension options page via:
+Open the options page via:
+- `chrome://extensions` → *Personal Rewriter* → **Details** → **Extension options**
+- Click the extension icon in the toolbar
+- Click **⚙ Settings** inside the rewrite panel
 
-- `chrome://extensions` → *Personal Rewriter* → **Details** → **Extension options**, or
-- Click the extension action icon in the toolbar (if pinned), or
-- Click **⚙ Settings** inside the rewrite panel.
-
-### Settings fields
+### Settings
 
 | Field | Default | Notes |
 |---|---|---|
-| AI chat URL | *(empty)* | The URL opened when you click *Open AI Chat*. Must be `http://` or `https://`. Leave empty to configure later. |
-| About Me | See below | Tells the AI who you are so it can match your voice. |
+| AI chat URL | *(empty)* | The tab opened when you click *Open AI Chat*. Must be `http://` or `https://`. |
+| About Me | See below | Tells the AI about you so it matches your voice. |
 | Global Prompt | See below | Writing rules applied to every rewrite. |
-| Avoid These Things | See below | Things the AI should not do in any mode. |
-| Default Mode | Normal | The mode pre-selected when the panel opens. |
-| Auto-open AI tab after copying | Off | When on, clicking *Copy Prompt* also opens the AI chat tab automatically. |
+| Avoid These Things | See below | Things the AI should never do. |
+| Default Mode | Normal | Mode pre-selected when the panel opens. |
+| Auto-open AI tab | Off | When on, *Copy Prompt* also opens the AI chat tab. |
 | Button position | Auto | Where the Rewrite button appears relative to the field. |
-| Enable on all sites | On | Turn off to disable the extension everywhere, then whitelist nothing. |
-| Disabled sites | *(empty)* | One hostname per line. The button never appears on these sites. |
+| Enable on all sites | On | Turn off to disable the extension globally. |
+| Disabled sites | *(empty)* | One hostname per line — button never appears on these sites. |
 
-### Default About Me
+### Default prompts
+
+<details>
+<summary>About Me (click to expand)</summary>
 
 ```
 English is not my first language, so I often write rough messages and want
@@ -117,7 +138,10 @@ them rewritten naturally. I prefer friendly, clear, respectful, and practical
 communication.
 ```
 
-### Default Global Prompt
+</details>
+
+<details>
+<summary>Global Prompt (click to expand)</summary>
 
 ```
 Preserve my original meaning.
@@ -128,7 +152,10 @@ Use simple natural English.
 Keep the output suitable for the same context.
 ```
 
-### Default Avoid These Things
+</details>
+
+<details>
+<summary>Avoid These Things (click to expand)</summary>
 
 ```
 Avoid robotic language.
@@ -136,68 +163,67 @@ Avoid unnecessary fancy words.
 Avoid over-apologizing.
 Avoid exaggerated compliments.
 Avoid emojis unless my original text already has emojis.
-Avoid phrases like I hope this message finds you well.
+Avoid phrases like "I hope this message finds you well."
 Avoid changing the emotional meaning.
 Avoid making short casual messages sound like corporate emails.
 ```
+
+</details>
 
 ---
 
 ## Modes
 
-| Mode | Behaviour |
+| Mode | Behavior |
 |---|---|
-| **Quick** | Fix grammar, light rephrase. Keep close to the original. Same length or shorter. |
+| **Quick** | Fix grammar, light rephrase. Stay close to the original. Same length or shorter. |
 | **Normal** | Rewrite naturally. Improve clarity, grammar, flow, and tone. Preserve meaning. |
-| **Formal** | Rewrite professionally and politely. Workplace, official, or broker communication. Still natural, not corporate. |
+| **Formal** | Rewrite professionally. Workplace or official communication. Natural, not corporate. |
 
 ---
 
-## How to use — step by step
+## Step-by-step usage
 
 1. Go to any page with an editable field (Gmail, WhatsApp Web, LinkedIn, any textarea, etc.).
 2. Click inside the field and type your message.
-3. Select **all** the text in the field (Ctrl+A / Cmd+A, or click and drag).
-4. A small **✏ Rewrite** button appears near the field.
-5. Click **✏ Rewrite**.
-6. Choose **Quick**, **Normal**, or **Formal**.
-7. Click one of:
-   - **📋 Copy Prompt** — copies the prompt to your clipboard.
-   - **🔗 Open AI Chat** — opens or focuses your configured AI chat tab.
-   - **📋 + 🔗 Copy & Open Chat** — does both at once.
-8. Switch to the AI chat tab. Paste (Ctrl+V / Cmd+V) and send.
-9. When the AI replies, copy the rewritten text.
-10. Switch back to the original page. The panel is still open.
-11. Click **✓ Apply Clipboard Result**.
-12. The field content is replaced with the rewritten text.
+3. Select **all** the text (Ctrl+A / Cmd+A).
+4. A **✏ Rewrite** button appears near the field — click it.
+5. Choose **Quick**, **Normal**, or **Formal**.
+6. Click one of:
+   - **Copy Prompt** — copies the prompt to your clipboard.
+   - **Open AI Chat** — opens or focuses your configured AI tab.
+   - **Copy & Open Chat** — does both at once.
+7. Switch to the AI chat tab. Paste and send.
+8. Copy the AI's reply.
+9. Switch back — the panel is still open.
+10. Click **Apply Clipboard Result** — the field is updated.
 
 > **Tip:** If the AI result is much longer than your original, the panel asks you to confirm before applying.
 
 ---
 
-## Supported editable field types
+## Supported field types
 
 - `<textarea>`
 - `<input type="text">`, `type="search"`, `type="email"`, `type="url"`
-- `contenteditable` elements — including Gmail compose, WhatsApp Web message box, LinkedIn post/message editors, and similar complex editors
+- `contenteditable` elements — Gmail compose, WhatsApp Web, LinkedIn editors, and similar rich editors
 
 The button does **not** appear on:
 
 - Password fields
 - Read-only or disabled fields
-- Non-editable page text
-- Partial selections (you must select the full content)
-- Fields with fewer than 3 characters of content
+- Partial selections (you must select the full content of the field)
+- Fields with fewer than 3 characters
 
 ---
 
 ## Known limitations
 
-- **iframes**: The content script runs in the main frame only (`all_frames: false`). Editable fields inside cross-origin iframes (such as Google Docs) are not supported. Same-origin iframes may work depending on the page.
-- **Undo**: The *Apply Result* action replaces field content. In most editors this is undoable with Ctrl+Z. In some React-controlled fields, the undo history may be limited.
-- **Clipboard permission**: On first use of *Apply Clipboard Result*, Chrome may display a one-time permission prompt for clipboard read access.
-- **SPA navigation**: Detected via `popstate` and a 1.5-second polling fallback. The panel closes on navigation; re-select the text to reopen it.
-- **AI chat URL**: The extension only tracks one configured URL. If you use multiple AI chat services, update the URL in settings as needed.
+- **Cross-origin iframes** — The content script runs in the main frame only. Fields inside cross-origin iframes (e.g. Google Docs) are not supported.
+- **Undo** — The replacement is undoable with Ctrl+Z in most editors. In some React-controlled fields the undo history may be limited.
+- **Clipboard permission** — Chrome may show a one-time permission prompt the first time you use *Apply Clipboard Result*.
+- **SPA navigation** — The panel closes on navigation. Re-select your text to reopen it.
+- **Single AI URL** — The extension tracks one configured AI chat URL. Update it in settings if you switch services.
 
 ---
 
@@ -207,59 +233,50 @@ The button does **not** appear on:
 |---|---|
 | Rewrite button never appears | Confirm the field is editable and you selected **all** text (not partial). Check *Disabled sites* in settings. |
 | *Open AI Chat* shows "No AI chat URL set" | Open settings and enter a valid `https://` URL. |
-| *Apply Clipboard Result* says "Clipboard is empty" | Make sure you copied the AI's reply before clicking Apply. |
-| Panel disappeared after switching tabs | This is expected. Re-select the text in the field to reopen the button, then click *Apply Clipboard Result* — you don't need to re-copy the prompt. |
-| Field content not updated in a React app | The extension uses the native value setter to trigger React's event system. If the field still doesn't update, try clicking inside it once after applying. |
+| *Apply Clipboard Result* says "Clipboard is empty" | Copy the AI's reply before clicking Apply. |
+| Panel disappeared after switching tabs | Expected. Re-select the text to reopen the button, then click *Apply Clipboard Result* — no need to re-copy the prompt. |
+| Field not updated in a React app | The extension uses the native value setter to trigger React's event system. If the field still doesn't update, click inside it once after applying. |
 
 ---
 
-## Manual test checklist
-
-- [ ] Textarea on a plain HTML page — select all, button appears, panel opens, modes work, Copy Prompt produces a prompt with your About Me text.
-- [ ] `input[type=text]` — same flow.
-- [ ] Gmail compose window — select all body text, full flow.
-- [ ] WhatsApp Web message box — select all, full flow.
-- [ ] LinkedIn post/message composer — select all, full flow.
-- [ ] Password field — button must NOT appear.
-- [ ] Readonly textarea — button must NOT appear.
-- [ ] Partial selection — button must NOT appear.
-- [ ] Fewer than 3 characters — button must NOT appear.
-- [ ] Escape key closes the panel while focus is in the field.
-- [ ] Escape key closes the panel while focus is inside the panel.
-- [ ] Tab navigation cycles through all panel buttons.
-- [ ] *Open AI Chat* with no URL set — status error and settings page opens.
-- [ ] *Apply Clipboard Result* with empty clipboard — clear error message.
-- [ ] *Apply Clipboard Result* with a result 3x longer than original — confirmation appears.
-- [ ] Disabled site (add `example.com` to disabled list) — button never appears on that site.
-- [ ] SPA navigation (e.g., switching Gmail conversations) — panel closes automatically.
-- [ ] Dark mode — panel and button render correctly.
-
----
-
-## Development commands
+## Development
 
 ```bash
-npm install          # install dependencies
-npm run dev          # Vite dev server with HMR (options page only)
-npm run build        # typecheck + production build into dist/
-npm run typecheck    # tsc --noEmit only
-npm run test         # Vitest run (all unit tests)
-npm run test:watch   # Vitest watch mode
-npm run lint         # ESLint over src/ and tests/
+npm install           # install dependencies
+npm run dev           # Vite dev server with HMR (options page only)
+npm run build         # typecheck + production build → dist/
+npm run typecheck     # tsc --noEmit only
+npm run test          # Vitest unit tests
+npm run test:watch    # Vitest watch mode
+npm run lint          # ESLint over src/ and tests/
+```
+
+### Project structure
+
+```
+src/
+├── background/       # service worker
+├── content/          # content script, floating UI, field detection
+├── options/          # settings page (React)
+├── shared/           # types, storage, prompt builder, validation
+├── styles/           # global CSS
+└── manifest.ts       # Manifest V3 declaration
 ```
 
 ---
 
 ## Stack
 
-- Manifest V3
-- React 18 + TypeScript 5 (strict)
-- Vite 5 + `@crxjs/vite-plugin` 2.x
-- Vitest + jsdom
-- ESLint + `@typescript-eslint`
+| Layer | Technology |
+|---|---|
+| Extension platform | Chrome Manifest V3 |
+| UI | React 18 + TypeScript 5 (strict) |
+| Build | Vite 5 + `@crxjs/vite-plugin` 2.x |
+| Testing | Vitest + jsdom |
+| Linting | ESLint + `@typescript-eslint` |
 
 ---
 
 ## License
 
-[MIT](LICENSE) — © 2026 Alexis. Provided as-is, no warranties. The authors are not liable for any claim or damages arising from the use of this software.
+[MIT](LICENSE) — provided as-is, no warranties of any kind.

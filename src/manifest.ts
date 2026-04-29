@@ -1,0 +1,48 @@
+import { defineManifest } from '@crxjs/vite-plugin';
+import pkg from '../package.json';
+
+// Manifest V3 declaration. Permissions are kept minimal:
+// - storage: persist user settings (About Me, Global Prompt, etc.)
+// - tabs: required to find/focus an existing AI chat tab and avoid duplicates
+// - clipboardRead: needed by Apply Result (only invoked after explicit click)
+// - clipboardWrite: needed by Copy Prompt (only invoked after explicit click)
+// host permissions are NOT requested. Content script uses <all_urls> via
+// "matches" only; the script reads/writes the active editable element under
+// activeTab, never network requests, never remote code.
+export default defineManifest({
+  manifest_version: 3,
+  name: 'Personal Rewriter',
+  version: pkg.version,
+  description:
+    'Rephrase selected text in editable fields via a manual AI-chat workflow. No APIs, no scraping, no automation.',
+  action: {
+    default_title: 'Personal Rewriter — open settings',
+  },
+  options_ui: {
+    page: 'src/options/index.html',
+    open_in_tab: true,
+  },
+  background: {
+    service_worker: 'src/background/index.ts',
+    type: 'module',
+  },
+  permissions: ['storage', 'tabs', 'activeTab', 'clipboardWrite', 'clipboardRead'],
+  content_scripts: [
+    {
+      // <all_urls> is required because the user may rephrase text in editable
+      // fields on any site (Gmail, LinkedIn, WhatsApp Web, etc.). The content
+      // script only reads the user's selection inside their editable target
+      // and never sends data anywhere.
+      matches: ['<all_urls>'],
+      js: ['src/content/index.tsx'],
+      run_at: 'document_idle',
+      all_frames: false,
+    },
+  ],
+  web_accessible_resources: [
+    {
+      resources: ['src/options/index.html'],
+      matches: ['<all_urls>'],
+    },
+  ],
+});

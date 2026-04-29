@@ -11,10 +11,10 @@ import pkg from '../package.json';
 // activeTab, never network requests, never remote code.
 export default defineManifest({
   manifest_version: 3,
-  name: 'Personal Rewriter',
+  name: 'Re-Phraser',
   version: pkg.version,
   description:
-    'Rephrase selected text in editable fields via a manual AI-chat workflow. No APIs, no scraping, no automation.',
+    'Rewrite selected text in any editable field using your AI chat — no API key, no scraping, no automation.',
   icons: {
     '16': 'src/assets/icons/icon16.png',
     '32': 'src/assets/icons/icon32.png',
@@ -22,7 +22,7 @@ export default defineManifest({
     '128': 'src/assets/icons/icon128.png',
   },
   action: {
-    default_title: 'Personal Rewriter — open settings',
+    default_title: 'Re-Phraser — open settings',
     default_icon: {
       '16': 'src/assets/icons/icon16.png',
       '32': 'src/assets/icons/icon32.png',

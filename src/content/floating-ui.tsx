@@ -9,108 +9,108 @@ import type { EditableSelectionInfo } from './selection';
 import { replaceEditableContent } from './replace';
 
 // ---------------------------------------------------------------------------
-// Page-level styles — scoped to [data-personal-rewriter-ui] to avoid leaking
+// Page-level styles — scoped to [data-re-phraser-ui] to avoid leaking
 // ---------------------------------------------------------------------------
 const PAGE_STYLES = `
-[data-personal-rewriter-ui] *,[data-personal-rewriter-ui] *::before,[data-personal-rewriter-ui] *::after{box-sizing:border-box;margin:0;padding:0}
-[data-personal-rewriter-ui]{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;font-size:13px;line-height:1.5;color:#0F172A;-webkit-font-smoothing:antialiased}
+[data-re-phraser-ui] *,[data-re-phraser-ui] *::before,[data-re-phraser-ui] *::after{box-sizing:border-box;margin:0;padding:0}
+[data-re-phraser-ui]{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;font-size:13px;line-height:1.5;color:#0F172A;-webkit-font-smoothing:antialiased}
 
 /* ── Logo ────────────────────────────────── */
-[data-personal-rewriter-ui] .pr-toolbar-logo{
+[data-re-phraser-ui] .pr-toolbar-logo{
   width:18px;height:18px;border-radius:4px;object-fit:contain;
   flex-shrink:0;margin-left:4px;margin-right:2px;opacity:.85}
 
 /* ── Toolbar ──────────────────────────────── */
-[data-personal-rewriter-ui] .pr-toolbar{
+[data-re-phraser-ui] .pr-toolbar{
   position:fixed;pointer-events:auto;display:inline-flex;align-items:center;gap:2px;
   padding:4px;background:#fff;border:1px solid rgba(0,0,0,.09);border-radius:12px;
   box-shadow:0 8px 28px rgba(0,0,0,.13),0 2px 8px rgba(0,0,0,.07),0 0 0 .5px rgba(0,0,0,.04);
   user-select:none;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
-[data-personal-rewriter-ui] .pr-tool-btn{
+[data-re-phraser-ui] .pr-tool-btn{
   display:inline-flex;align-items:center;gap:5px;
   padding:6px 11px;background:transparent;color:#334155;border:none;border-radius:8px;
   font:500 12px/1 inherit;font-family:inherit;cursor:pointer;white-space:nowrap;
   transition:background .15s,color .15s}
-[data-personal-rewriter-ui] .pr-tool-btn svg{flex-shrink:0;opacity:.7;transition:opacity .15s}
-[data-personal-rewriter-ui] .pr-tool-btn:hover{background:#6366F1;color:#fff}
-[data-personal-rewriter-ui] .pr-tool-btn:hover svg{opacity:1}
-[data-personal-rewriter-ui] .pr-tool-btn:focus-visible{outline:2px solid #6366F1;outline-offset:1px}
-[data-personal-rewriter-ui] .pr-tool-divider{width:1px;height:18px;background:rgba(0,0,0,.08);margin:0 2px;flex-shrink:0}
-[data-personal-rewriter-ui] .pr-tool-settings{padding:6px 8px;color:#94A3B8}
-[data-personal-rewriter-ui] .pr-tool-settings:hover{background:#F1F5F9;color:#6366F1}
+[data-re-phraser-ui] .pr-tool-btn svg{flex-shrink:0;opacity:.7;transition:opacity .15s}
+[data-re-phraser-ui] .pr-tool-btn:hover{background:#6366F1;color:#fff}
+[data-re-phraser-ui] .pr-tool-btn:hover svg{opacity:1}
+[data-re-phraser-ui] .pr-tool-btn:focus-visible{outline:2px solid #6366F1;outline-offset:1px}
+[data-re-phraser-ui] .pr-tool-divider{width:1px;height:18px;background:rgba(0,0,0,.08);margin:0 2px;flex-shrink:0}
+[data-re-phraser-ui] .pr-tool-settings{padding:6px 8px;color:#94A3B8}
+[data-re-phraser-ui] .pr-tool-settings:hover{background:#F1F5F9;color:#6366F1}
 
 /* ── Panel ────────────────────────────────── */
-[data-personal-rewriter-ui] .pr-panel{
+[data-re-phraser-ui] .pr-panel{
   position:fixed;pointer-events:auto;width:300px;overflow:hidden;color:#0F172A;
   background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:16px;
   box-shadow:0 20px 60px rgba(0,0,0,.14),0 8px 20px rgba(0,0,0,.08),0 0 0 .5px rgba(0,0,0,.04)}
 
 /* ── Spinner / loading ────────────────────── */
-[data-personal-rewriter-ui] .pr-loading{
+[data-re-phraser-ui] .pr-loading{
   display:flex;flex-direction:column;align-items:center;gap:10px;padding:28px 20px 22px}
-[data-personal-rewriter-ui] .pr-spinner{
+[data-re-phraser-ui] .pr-spinner{
   width:32px;height:32px;border:2.5px solid #E2E8F0;border-top-color:#6366F1;
   border-radius:50%;animation:pr-spin .75s linear infinite}
 @keyframes pr-spin{to{transform:rotate(360deg)}}
-[data-personal-rewriter-ui] .pr-loading-label{font-size:13px;font-weight:600;color:#0F172A;text-align:center}
-[data-personal-rewriter-ui] .pr-loading-sub{font-size:11px;color:#94A3B8;text-align:center;margin-top:-4px}
-[data-personal-rewriter-ui] .pr-cancel{
+[data-re-phraser-ui] .pr-loading-label{font-size:13px;font-weight:600;color:#0F172A;text-align:center}
+[data-re-phraser-ui] .pr-loading-sub{font-size:11px;color:#94A3B8;text-align:center;margin-top:-4px}
+[data-re-phraser-ui] .pr-cancel{
   margin-top:2px;background:transparent;border:none;color:#94A3B8;
   font:500 11px/1 inherit;font-family:inherit;cursor:pointer;
   padding:4px 10px;border-radius:6px;transition:color .12s,background .12s}
-[data-personal-rewriter-ui] .pr-cancel:hover{color:#EF4444;background:#FEF2F2}
+[data-re-phraser-ui] .pr-cancel:hover{color:#EF4444;background:#FEF2F2}
 
 /* ── Result confirm ───────────────────────── */
-[data-personal-rewriter-ui] .pr-confirm{display:flex;flex-direction:column;gap:10px;padding:16px}
-[data-personal-rewriter-ui] .pr-result-label{
+[data-re-phraser-ui] .pr-confirm{display:flex;flex-direction:column;gap:10px;padding:16px}
+[data-re-phraser-ui] .pr-result-label{
   font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#94A3B8}
-[data-personal-rewriter-ui] .pr-result-text{
+[data-re-phraser-ui] .pr-result-text{
   background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;
   padding:10px 12px;font-size:13px;line-height:1.6;color:#0F172A;
   max-height:150px;overflow-y:auto;white-space:pre-wrap;word-break:break-word;scrollbar-width:thin}
-[data-personal-rewriter-ui] .pr-confirm-actions{display:flex;gap:8px}
-[data-personal-rewriter-ui] .pr-confirm-yes{
+[data-re-phraser-ui] .pr-confirm-actions{display:flex;gap:8px}
+[data-re-phraser-ui] .pr-confirm-yes{
   flex:1;display:inline-flex;align-items:center;justify-content:center;gap:5px;
   background:#6366F1;color:#fff;border:none;border-radius:8px;
   padding:8px 12px;font:600 12px/1.4 inherit;font-family:inherit;cursor:pointer;
   transition:background .15s}
-[data-personal-rewriter-ui] .pr-confirm-yes:hover{background:#4F46E5}
-[data-personal-rewriter-ui] .pr-confirm-yes:focus-visible{outline:2px solid #6366F1;outline-offset:2px}
-[data-personal-rewriter-ui] .pr-confirm-no{
+[data-re-phraser-ui] .pr-confirm-yes:hover{background:#4F46E5}
+[data-re-phraser-ui] .pr-confirm-yes:focus-visible{outline:2px solid #6366F1;outline-offset:2px}
+[data-re-phraser-ui] .pr-confirm-no{
   flex:1;display:inline-flex;align-items:center;justify-content:center;gap:5px;
   background:#F1F5F9;color:#475569;border:none;border-radius:8px;
   padding:8px 12px;font:500 12px/1.4 inherit;font-family:inherit;cursor:pointer;
   transition:background .15s}
-[data-personal-rewriter-ui] .pr-confirm-no:hover{background:#E2E8F0}
-[data-personal-rewriter-ui] .pr-confirm-no:focus-visible{outline:2px solid #6366F1;outline-offset:2px}
-[data-personal-rewriter-ui] .pr-status{font-size:11px;color:#64748B;text-align:center}
-[data-personal-rewriter-ui] .pr-status--error{color:#EF4444}
-[data-personal-rewriter-ui] .pr-status--success{color:#10B981}
+[data-re-phraser-ui] .pr-confirm-no:hover{background:#E2E8F0}
+[data-re-phraser-ui] .pr-confirm-no:focus-visible{outline:2px solid #6366F1;outline-offset:2px}
+[data-re-phraser-ui] .pr-status{font-size:11px;color:#64748B;text-align:center}
+[data-re-phraser-ui] .pr-status--error{color:#EF4444}
+[data-re-phraser-ui] .pr-status--success{color:#10B981}
 
 /* ── Dark mode ────────────────────────────── */
 @media(prefers-color-scheme:dark){
-  [data-personal-rewriter-ui]{color:#E2E8F0}
-  [data-personal-rewriter-ui] .pr-toolbar{
+  [data-re-phraser-ui]{color:#E2E8F0}
+  [data-re-phraser-ui] .pr-toolbar{
     background:rgba(15,15,25,.96);border-color:rgba(255,255,255,.08);
     box-shadow:0 8px 28px rgba(0,0,0,.5),0 2px 8px rgba(0,0,0,.3),0 0 0 .5px rgba(255,255,255,.04)}
-  [data-personal-rewriter-ui] .pr-tool-btn{color:#CBD5E1}
-  [data-personal-rewriter-ui] .pr-tool-btn:hover{background:#6366F1;color:#fff}
-  [data-personal-rewriter-ui] .pr-tool-divider{background:rgba(255,255,255,.1)}
-  [data-personal-rewriter-ui] .pr-tool-settings{color:#475569}
-  [data-personal-rewriter-ui] .pr-tool-settings:hover{background:rgba(99,102,241,.15);color:#818CF8}
-  [data-personal-rewriter-ui] .pr-panel{
+  [data-re-phraser-ui] .pr-tool-btn{color:#CBD5E1}
+  [data-re-phraser-ui] .pr-tool-btn:hover{background:#6366F1;color:#fff}
+  [data-re-phraser-ui] .pr-tool-divider{background:rgba(255,255,255,.1)}
+  [data-re-phraser-ui] .pr-tool-settings{color:#475569}
+  [data-re-phraser-ui] .pr-tool-settings:hover{background:rgba(99,102,241,.15);color:#818CF8}
+  [data-re-phraser-ui] .pr-panel{
     background:#0F0F1A;border-color:rgba(255,255,255,.08);color:#E2E8F0;
     box-shadow:0 20px 60px rgba(0,0,0,.6),0 8px 20px rgba(0,0,0,.4),0 0 0 .5px rgba(255,255,255,.04)}
-  [data-personal-rewriter-ui] .pr-spinner{border-color:rgba(255,255,255,.1);border-top-color:#818CF8}
-  [data-personal-rewriter-ui] .pr-loading-label{color:#E2E8F0}
-  [data-personal-rewriter-ui] .pr-loading-sub{color:#334155}
-  [data-personal-rewriter-ui] .pr-cancel:hover{color:#F87171;background:rgba(239,68,68,.1)}
-  [data-personal-rewriter-ui] .pr-result-text{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.08);color:#E2E8F0}
-  [data-personal-rewriter-ui] .pr-confirm-no{background:rgba(255,255,255,.06);color:#94A3B8}
-  [data-personal-rewriter-ui] .pr-confirm-no:hover{background:rgba(255,255,255,.1)}
-  [data-personal-rewriter-ui] .pr-status{color:#475569}
-  [data-personal-rewriter-ui] .pr-status--error{color:#F87171}
-  [data-personal-rewriter-ui] .pr-status--success{color:#34D399}
+  [data-re-phraser-ui] .pr-spinner{border-color:rgba(255,255,255,.1);border-top-color:#818CF8}
+  [data-re-phraser-ui] .pr-loading-label{color:#E2E8F0}
+  [data-re-phraser-ui] .pr-loading-sub{color:#334155}
+  [data-re-phraser-ui] .pr-cancel:hover{color:#F87171;background:rgba(239,68,68,.1)}
+  [data-re-phraser-ui] .pr-result-text{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.08);color:#E2E8F0}
+  [data-re-phraser-ui] .pr-confirm-no{background:rgba(255,255,255,.06);color:#94A3B8}
+  [data-re-phraser-ui] .pr-confirm-no:hover{background:rgba(255,255,255,.1)}
+  [data-re-phraser-ui] .pr-status{color:#475569}
+  [data-re-phraser-ui] .pr-status--error{color:#F87171}
+  [data-re-phraser-ui] .pr-status--success{color:#34D399}
 }
 `;
 
@@ -564,7 +564,7 @@ function FloatingUiComponent({ mountEl }: FloatingUiProps): JSX.Element | null {
       className="pr-panel"
       role="dialog"
       aria-modal="true"
-      aria-label="Personal Rewriter"
+      aria-label="Re-Phraser"
       tabIndex={-1}
       style={{ top: pPos.top, left: pPos.left }}
     >
@@ -630,7 +630,7 @@ export function mountFloatingUi(): FloatingUiHandle {
 
   // Inject scoped styles into document.head (no shadow DOM).
   const styleEl = document.createElement('style');
-  styleEl.setAttribute('data-personal-rewriter-styles', '');
+  styleEl.setAttribute('data-re-phraser-styles', '');
   styleEl.textContent = PAGE_STYLES;
   document.head.appendChild(styleEl);
   _styleEl = styleEl;
@@ -638,8 +638,8 @@ export function mountFloatingUi(): FloatingUiHandle {
   // Host element rendered directly into document.body — no shadow DOM.
   // This ensures native click events bubble normally without shadow boundary issues.
   const host = document.createElement('div');
-  host.setAttribute('data-personal-rewriter', 'host');
-  host.setAttribute('data-personal-rewriter-ui', '');
+  host.setAttribute('data-re-phraser', 'host');
+  host.setAttribute('data-re-phraser-ui', '');
   host.style.cssText =
     'all:unset;position:fixed;top:0;left:0;width:0;height:0;overflow:visible;z-index:2147483647';
   document.body.appendChild(host);

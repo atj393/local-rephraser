@@ -1,9 +1,9 @@
 {
-  "name": "personal-rewriter-extension",
+  "name": "re-phraser-extension",
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "Chrome MV3 extension that rephrases selected text in editable fields via a manual AI-chat workflow. No API, no automation, no telemetry.",
+  "description": "Re-Phraser: Chrome MV3 extension that rewrites selected text using any AI chat — no API key, no automation, no telemetry.",
   "keywords": [
     "chrome-extension",
     "browser-extension",

@@ -94,12 +94,12 @@ export function OptionsApp(): JSX.Element {
         <div className="pr-options__title-row">
           <img
             src={chrome.runtime.getURL('src/assets/icons/icon48.png')}
-            alt="Personal Rewriter"
+            alt="Re-Phraser"
             width={36}
             height={36}
             style={{ borderRadius: 8 }}
           />
-          <h1>Personal Rewriter</h1>
+          <h1>Re-Phraser</h1>
         </div>
         <p className="pr-muted">
           Personalize how your selected text is rewritten. Settings are stored locally.
@@ -111,7 +111,7 @@ export function OptionsApp(): JSX.Element {
         <section className="pr-card pr-welcome">
           <h2>👋 Welcome — one quick setup step</h2>
           <p className="pr-muted">
-            Personal Rewriter works by sending your text to an AI chat tab you already have open.
+            Re-Phraser works by sending your text to an AI chat tab you already have open.
             You just need to tell it which tab to use.
           </p>
           <ol className="pr-steps">

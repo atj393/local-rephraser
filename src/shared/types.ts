@@ -1,4 +1,4 @@
-// Core shared types for the Personal Rewriter extension.
+// Core shared types for the Re-Phraser extension.
 
 export type RewriteMode = 'quick' | 'normal' | 'formal';
 

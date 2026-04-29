@@ -112,9 +112,9 @@ Open the extension options page via:
 ### Default About Me
 
 ```
-I am Alexis, a software developer. English is not my first language, so I
-often write rough messages and want them rewritten naturally. I prefer
-friendly, clear, respectful, and practical communication.
+English is not my first language, so I often write rough messages and want
+them rewritten naturally. I prefer friendly, clear, respectful, and practical
+communication.
 ```
 
 ### Default Global Prompt

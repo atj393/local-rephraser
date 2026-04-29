@@ -1,6 +1,6 @@
 import type { ExtensionSettings, RewriteMode } from './types';
 
-export const DEFAULT_ABOUT_ME = `I am Alexis, a software developer. English is not my first language, so I often write rough messages and want them rewritten naturally. I prefer friendly, clear, respectful, and practical communication.`;
+export const DEFAULT_ABOUT_ME = `English is not my first language, so I often write rough messages and want them rewritten naturally. I prefer friendly, clear, respectful, and practical communication.`;
 
 export const DEFAULT_GLOBAL_PROMPT = `Preserve my original meaning.
 Do not add fake details.
